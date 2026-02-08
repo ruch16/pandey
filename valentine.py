@@ -14,49 +14,49 @@ st.set_page_config(
 # ============================================
 
 # if 'authenticated' not in st.session_state:
-#     st.session_state.authenticated = False
+    st.session_state.authenticated = False
 
-# if not st.session_state.authenticated:
-#     st.markdown("<h1 style='text-align: center; color: #ff1493;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
-#     st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
-#     
-#     col1, col2, col3 = st.columns([1, 2, 1])
-#     with col2:
-#         password = st.text_input("Secret Code:", type="password", key="auth_password")
-#         if st.button("✨ Enter ✨", type="primary", use_container_width=True):
-#             # CHANGE THIS PASSWORD TO YOUR OWN SECRET CODE!
-#             if password == "BeMyValentine2026":
-#                 st.session_state.authenticated = True
-#                 st.rerun()
-#             else:
-#                 st.error("❌ Wrong code! Try again 💔")
-#     st.stop()
+if not st.session_state.authenticated:
+ st.markdown("<h1 style='text-align: center; color: #ff1493;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
+     col1, col2, col3 = st.columns([1, 2, 1])
+     with col2:
+         password = st.text_input("Secret Code:", type="password", key="auth_password")
+         if st.button("✨ Enter ✨", type="primary", use_container_width=True):
+             # CHANGE THIS PASSWORD TO YOUR OWN SECRET CODE!
+             if password == "MeNu1316":
+                 st.session_state.authenticated = True
+                 st.rerun()
+             else:
+                 st.error("❌ Wrong code! Try again 💔")
+     st.stop()
 
 # ============================================
 # CUSTOMIZABLE CONTENT - EDIT THESE!
 # ============================================
 
 LETTER_CONTENT = {
-    "greeting": "My Dearest [Their Name] 💕",
+    "greeting": "My Dudu💕",
     "message": """
-    I've been thinking about this for a while now, and I couldn't find a better way 
-    to ask you than creating this special moment just for you.
-    
-    From the moment we met, you've brought so much joy and light into my life. 
-    Your smile brightens my day, your laughter is music to my ears, and every moment 
-    spent with you feels like a beautiful dream.
+    Ever since, i met you, i seem to have fallen
+    deeply in love with you. So much so that i cant even breathe
+    but you r not with me. I never thought my lil crush on you will
+    grow so much, though we r in a relationship i seem to fall in love with u 
+    daily. not just ur face, but ur sweetness, ur cuteness, ur kindness,
+    the way your eyes sparkle in the sun, the way u look mrng mrng, or the way u act only around me.
+    i cant wait to be with you my lovee
     
     So, on this special day, I have one very important question to ask you...
     
     Will you be my Valentine? 💖
     """,
-    "signature": "With all my heart,\n[Your Name]"
+    "signature": "With all my heart and pussy, your bubu💖"
 }
 
 SUCCESS_MESSAGE = {
     "title": "YES! 🎉💕",
     "message": """
-    You just made me the happiest person alive! 
+    You just made me even more happy! i m the happiest person in this worldddddd 
     
     I promise to make this Valentine's Day (and every day after) 
     absolutely special for you. 
