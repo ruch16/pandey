@@ -269,13 +269,11 @@ if not st.session_state.curtains_open:
                     document.getElementById('leftCurtain').classList.add('open');
                     document.getElementById('rightCurtain').classList.add('open');
                     
-                    // After curtains open animation, trigger page reload to show envelope
+                    // This is the part that was likely failing:
                     setTimeout(function() {
-                        // Use Streamlit's query params to trigger state change
                         const url = new URL(window.parent.location.href);
                         url.searchParams.set('curtains', 'open');
-                        window.parent.history.pushState({}, '', url);
-                        window.parent.location.reload();
+                        window.parent.location.href = url.href; // Forces the move to the next state
                     }, 1600);
                 }
             }
