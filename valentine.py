@@ -17,13 +17,17 @@ if 'authenticated' not in st.session_state:
     st.session_state.curtains_open = False
 
 if not st.session_state.authenticated:
-    st.markdown("""
+
+    css = """
     <style>
         .stApp {
             background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
         }
     </style>
-    """, unsafe_allow_html=True)
+    """
+
+    st.markdown(css, unsafe_allow_html=True)
+
 
     
     st.markdown("<h1 style='text-align: center; color: #ff1493; margin-top: 100px;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
