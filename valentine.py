@@ -79,7 +79,7 @@ SUCCESS_MESSAGE = {
     
     Get ready for an amazing time together! 💖
     
-    I can't wait to celebrate with you! 🌹
+    I can't wait to celebrate with you! 🌹"""
 
 }
 
