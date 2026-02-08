@@ -21,7 +21,7 @@ if not st.session_state.authenticated:
     st.markdown("""
     <style>
         .stApp {
-        bg_style = "background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);"
+        css = "background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);"
         }
     </style>
     """, unsafe_allow_html=True)
