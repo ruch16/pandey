@@ -14,22 +14,21 @@ st.set_page_config(
 # ============================================
 
 # if 'authenticated' not in st.session_state:
-    st.session_state.authenticated = False
+st.session_state.authenticated = False
 
 if not st.session_state.authenticated:
- st.markdown("<h1 style='text-align: center; color: #ff1493;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
-     col1, col2, col3 = st.columns([1, 2, 1])
-     with col2:
-         password = st.text_input("Secret Code:", type="password", key="auth_password")
-         if st.button("✨ Enter ✨", type="primary", use_container_width=True):
-             # CHANGE THIS PASSWORD TO YOUR OWN SECRET CODE!
-             if password == "MeNu1316":
-                 st.session_state.authenticated = True
-                 st.rerun()
-             else:
-                 st.error("❌ Wrong code! Try again 💔")
-     st.stop()
+    st.markdown("<h1 style='text-align: center; color: #ff1493;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        password = st.text_input("Secret Code:", type="password", key="auth_password")
+        if st.button("✨ Enter ✨", type="primary", use_container_width=True):
+            if password == "MeNu1316":
+                st.session_state.authenticated = True
+                st.rerun()
+            else:
+                st.error("❌ Wrong code! Try again 💔")
+                st.stop()
 
 # ============================================
 # CUSTOMIZABLE CONTENT - EDIT THESE!
