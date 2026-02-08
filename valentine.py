@@ -20,9 +20,9 @@ if not st.session_state.authenticated:
     # Add pink gradient background for password page
     st.markdown("""
     <style>
-        .stApp {
-            "background: linear-gradient(135 deg, #ffeef8 0%, #ffe0f0 100%);"
-        }
+        .stApp {{
+        background: linear-gradient(135 deg, #ffeef8 0%, #ffe0f0 100%);"
+        {}
     </style>
     """, unsafe_allow_html=True)
     
