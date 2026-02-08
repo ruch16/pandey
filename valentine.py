@@ -16,32 +16,27 @@ st.set_page_config(
 if 'authenticated' not in st.session_state:
      st.session_state.authenticated = False
      st.session_state.curtains_open = False
-
- if not st.session_state.authenticated:
-     # Add pink gradient background for password page
-     st.markdown("""
-     <style>
-         .stApp {
-             background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+    if not st.session_state.authenticated:
+        st.markdown("""
+        <style>
+        .stApp {
+        background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
          }
-     </style>
-     """, unsafe_allow_html=True)
-#     
-     st.markdown("<h1 style='text-align: center; color: #ff1493; margin-top: 100px;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
-     st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
-#     
-     col1, col2, col3 = st.columns([1, 2, 1])
-     with col2:
-         password = st.text_input("Secret Code:", type="password", key="auth_password")
-         if st.button("✨ Enter ✨", type="primary", use_container_width=True):
-             # CHANGE THIS PASSWORD TO YOUR OWN SECRET CODE!
-             if password == "MeNu1316":
-                 st.session_state.authenticated = True
-                 st.session_state.curtains_open = False  # Start with curtains closed
-                 st.rerun()
-             else:
-                 st.error("❌ Wrong code! Try again 💔")
-     st.stop()
+         </style>
+         """, unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; color: #ff1493; margin-top: 100px;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            password = st.text_input("Secret Code:", type="password", key="auth_password")
+            if st.button("✨ Enter ✨", type="primary", use_container_width=True):
+                if password == "MeNu1316":
+                    st.session_state.authenticated = True
+                    st.session_state.curtains_open = False  # Start with curtains closed
+                    st.rerun()
+                else:
+                    st.error("❌ Wrong code! Try again 💔")
+                    st.stop()
 
 # ============================================
 # CUSTOMIZABLE CONTENT - EDIT THESE!
