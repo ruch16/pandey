@@ -14,8 +14,8 @@ st.set_page_config(
 # ============================================
 
 if 'authenticated' not in st.session_state:
-     st.session_state.authenticated = False
-     st.session_state.curtains_open = False
+    st.session_state.authenticated = False
+    st.session_state.curtains_open = False
     if not st.session_state.authenticated:
         st.markdown("""
         <style>
