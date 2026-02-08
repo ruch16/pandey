@@ -17,14 +17,14 @@ if 'authenticated' not in st.session_state:
     st.session_state.curtains_open = False
 
 if not st.session_state.authenticated:
-    # Add pink gradient background for password page
     st.markdown("""
     <style>
         .stApp {
-        background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
         }
     </style>
     """, unsafe_allow_html=True)
+
     
     st.markdown("<h1 style='text-align: center; color: #ff1493; margin-top: 100px;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
