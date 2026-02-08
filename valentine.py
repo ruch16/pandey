@@ -14,48 +14,60 @@ st.set_page_config(
 # ============================================
 
 # if 'authenticated' not in st.session_state:
-st.session_state.authenticated = False
+#     st.session_state.authenticated = False
+#     st.session_state.curtains_open = False
 
-if not st.session_state.authenticated:
-    st.markdown("<h1 style='text-align: center; color: #ff1493;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        password = st.text_input("Secret Code:", type="password", key="auth_password")
-        if st.button("✨ Enter ✨", type="primary", use_container_width=True):
-            if password == "MeNu1316":
-                st.session_state.authenticated = True
-                st.rerun()
-            else:
-                st.error("❌ Wrong code! Try again 💔")
-                st.stop()
+# if not st.session_state.authenticated:
+#     # Add pink gradient background for password page
+#     st.markdown("""
+#     <style>
+#         .stApp {
+#             background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+#         }
+#     </style>
+#     """, unsafe_allow_html=True)
+#     
+#     st.markdown("<h1 style='text-align: center; color: #ff1493; margin-top: 100px;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
+#     st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
+#     
+#     col1, col2, col3 = st.columns([1, 2, 1])
+#     with col2:
+#         password = st.text_input("Secret Code:", type="password", key="auth_password")
+#         if st.button("✨ Enter ✨", type="primary", use_container_width=True):
+#             # CHANGE THIS PASSWORD TO YOUR OWN SECRET CODE!
+#             if password == "BeMyValentine2026":
+#                 st.session_state.authenticated = True
+#                 st.session_state.curtains_open = False  # Start with curtains closed
+#                 st.rerun()
+#             else:
+#                 st.error("❌ Wrong code! Try again 💔")
+#     st.stop()
 
 # ============================================
 # CUSTOMIZABLE CONTENT - EDIT THESE!
 # ============================================
 
 LETTER_CONTENT = {
-    "greeting": "My Dudu💕",
+    "greeting": "My Dearest [Their Name] 💕",
     "message": """
-    Ever since, i met you, i seem to have fallen
-    deeply in love with you. So much so that i cant even breathe
-    but you r not with me. I never thought my lil crush on you will
-    grow so much, though we r in a relationship i seem to fall in love with u 
-    daily. not just ur face, but ur sweetness, ur cuteness, ur kindness,
-    the way your eyes sparkle in the sun, the way u look mrng mrng, or the way u act only around me.
-    i cant wait to be with you my lovee
+    I've been thinking about this for a while now, and I couldn't find a better way 
+    to ask you than creating this special moment just for you.
+    
+    From the moment we met, you've brought so much joy and light into my life. 
+    Your smile brightens my day, your laughter is music to my ears, and every moment 
+    spent with you feels like a beautiful dream.
     
     So, on this special day, I have one very important question to ask you...
     
     Will you be my Valentine? 💖
     """,
-    "signature": "With all my heart and pussy, your bubu💖"
+    "signature": "With all my heart,\n[Your Name]"
 }
 
 SUCCESS_MESSAGE = {
     "title": "YES! 🎉💕",
     "message": """
-    You just made me even more happy! i m the happiest person in this worldddddd 
+    You just made me the happiest person alive! 
     
     I promise to make this Valentine's Day (and every day after) 
     absolutely special for you. 
@@ -130,11 +142,13 @@ st.markdown("""
         left: 50%;
         transform: translate(-50%, -50%);
         color: white;
-        font-size: 2.5em;
+        font-size: 2.2em;
         font-weight: bold;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         font-family: 'Georgia', serif;
         pointer-events: none;
+        text-align: center;
+        width: 80%;
     }
     
     /* Envelope */
@@ -310,48 +324,63 @@ if 'no_clicks' not in st.session_state:
 
 # Curtains
 if not st.session_state.curtains_open:
-    components.html(f"""
-    <div class="curtain-container">
-        <div class="curtain curtain-left" onclick="window.parent.postMessage({{type: 'streamlit:setComponentValue', value: 'open_curtains'}}, '*')">
-            <div class="curtain-text">Click to Open</div>
+    components.html("""
+    <div class="curtain-container" id="curtainContainer">
+        <div class="curtain curtain-left">
+            <div class="curtain-text">Click Anywhere to Open</div>
         </div>
-        <div class="curtain curtain-right" onclick="window.parent.postMessage({{type: 'streamlit:setComponentValue', value: 'open_curtains'}}, '*')">
-        </div>
+        <div class="curtain curtain-right"></div>
     </div>
     <script>
-        window.addEventListener('message', function(event) {{
-            if (event.data.type === 'streamlit:setComponentValue') {{
+        let clicked = false;
+        const container = document.getElementById('curtainContainer');
+        
+        container.addEventListener('click', function() {
+            if (!clicked) {
+                clicked = true;
                 const curtains = document.querySelectorAll('.curtain');
                 curtains.forEach(c => c.classList.add('open'));
-            }}
-        }});
+                
+                // Wait for animation to complete, then notify Streamlit
+                setTimeout(function() {
+                    window.parent.postMessage({type: 'streamlit:setComponentValue', value: true}, '*');
+                }, 1500);
+            }
+        });
     </script>
-    """, height=0)
+    """, height=800)
     
-    st.markdown("<br><br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        if st.button("🎭 Open Curtains", key="curtain_button", type="primary", use_container_width=True):
-            st.session_state.curtains_open = True
-            st.rerun()
+    # This will trigger rerun when curtains finish opening
+    if st.button("", key="curtain_trigger", help="Opening curtains..."):
+        st.session_state.curtains_open = True
+        st.rerun()
 
 # Main content (shown after curtains open)
 elif not st.session_state.envelope_opened:
-    st.markdown("""
-    <div class="envelope-container">
+    components.html("""
+    <div class="envelope-container" id="envelopeContainer">
         <div class="envelope">
             <div class="envelope-flap"></div>
             <div class="heart-seal">❤️</div>
         </div>
-        <div class="open-me-text">Open Me 💌</div>
+        <div class="open-me-text">Click the Envelope 💌</div>
     </div>
-    """, unsafe_allow_html=True)
+    <script>
+        let envelopeClicked = false;
+        const envelope = document.getElementById('envelopeContainer');
+        
+        envelope.addEventListener('click', function() {
+            if (!envelopeClicked) {
+                envelopeClicked = true;
+                window.parent.postMessage({type: 'streamlit:setComponentValue', value: true}, '*');
+            }
+        });
+    </script>
+    """, height=400)
     
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        if st.button("📬 Open Envelope", key="envelope_button", type="primary", use_container_width=True):
-            st.session_state.envelope_opened = True
-            st.rerun()
+    if st.button("", key="envelope_trigger", help="Opening envelope..."):
+        st.session_state.envelope_opened = True
+        st.rerun()
 
 # Letter and Yes/No buttons
 elif st.session_state.answer is None:
@@ -413,34 +442,66 @@ elif st.session_state.answer is None:
 
 # Success page with confetti
 else:
-    # Confetti animation
+    # Confetti animation - FIXED VERSION
     components.html("""
+    <!DOCTYPE html>
+    <html>
+    <head>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
         .confetti {
             position: fixed;
             width: 10px;
             height: 10px;
-            background: #ff69b4;
-            animation: confetti-fall 3s linear infinite;
+            z-index: 9999;
         }
         @keyframes confetti-fall {
-            to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
         }
     </style>
+    </head>
+    <body>
     <script>
-        const colors = ['#ff69b4', '#ff1493', '#ff6b9d', '#ffc0cb', '#ff85a1', '#ffb6c1', '#db7093'];
-        for (let i = 0; i < 150; i++) {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * 100 + 'vw';
-            confetti.style.animationDelay = Math.random() * 3 + 's';
-            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.width = (Math.random() * 10 + 5) + 'px';
-            confetti.style.height = confetti.style.width;
-            document.body.appendChild(confetti);
+        const colors = ['#ff69b4', '#ff1493', '#ff6b9d', '#ffc0cb', '#ff85a1', '#ffb6c1', '#db7093', '#c71585', '#ff007f'];
+        
+        function createConfetti() {
+            for (let i = 0; i < 200; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 15 + 5) + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
+                confetti.style.animation = 'confetti-fall ' + confetti.style.animationDuration + ' linear infinite';
+                confetti.style.animationDelay = confetti.style.animationDelay;
+                document.body.appendChild(confetti);
+            }
         }
+        
+        // Create confetti immediately
+        createConfetti();
+        
+        // Add more confetti every 3 seconds for continuous effect
+        setInterval(createConfetti, 3000);
     </script>
-    """, height=0)
+    </body>
+    </html>
+    """, height=600)
     
     st.markdown(f"""
     <div class="success-message">
