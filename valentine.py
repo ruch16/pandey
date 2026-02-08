@@ -9,33 +9,38 @@ st.set_page_config(
 )
 
 # ============================================
-# OPTIONAL: PASSWORD PROTECTION
-# Uncomment the lines below to add password protection
+# PASSWORD PROTECTION - ENABLED BY DEFAULT
 # ============================================
 
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
     st.session_state.curtains_open = False
-    if not st.session_state.authenticated:
-        st.markdown("""<style>
+
+if not st.session_state.authenticated:
+    # Add pink gradient background for password page
+    st.markdown("""
+    <style>
         .stApp {
-        background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
+            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
         }
-        </style>
-        """, unsafe_allow_html=True)
-        st.markdown("<h1 style='text-align: center; color: #ff1493; margin-top: 100px;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
-        st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            password = st.text_input("Secret Code:", type="password", key="auth_password")
-            if st.button("✨ Enter ✨", type="primary", use_container_width=True):
-                if password == "MeNu1316":
-                    st.session_state.authenticated = True
-                    st.session_state.curtains_open = False  # Start with curtains closed
-                    st.rerun()
-                else:
-                    st.error("❌ Wrong code! Try again 💔")
-                    st.stop()
+    </style>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<h1 style='text-align: center; color: #ff1493; margin-top: 100px;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        password = st.text_input("Secret Code:", type="password", key="auth_password")
+        if st.button("✨ Enter ✨", type="primary", use_container_width=True):
+            # CHANGE THIS PASSWORD TO YOUR OWN SECRET CODE!
+            if password == "MeNu1316":
+                st.session_state.authenticated = True
+                st.session_state.curtains_open = False  # Start with curtains closed
+                st.rerun()
+            else:
+                st.error("❌ Wrong code! Try again 💔")
+    st.stop()
 
 # ============================================
 # CUSTOMIZABLE CONTENT - EDIT THESE!
@@ -44,7 +49,7 @@ if 'authenticated' not in st.session_state:
 LETTER_CONTENT = {
     "greeting": "My Dudu 💕",
     "message": """
-  Ever since, i met you, i seem to have fallen
+    Ever since, i met you, i seem to have fallen
     deeply in love with you. So much so that i cant even breathe
     but you r not with me. I never thought my lil crush on you will
     grow so much, though we r in a relationship i seem to fall in love with u 
@@ -57,13 +62,12 @@ LETTER_CONTENT = {
     Will you be my Valentine? 💖
     """,
     "signature": "With all my heart and pussy, your bubu💖"
+
 }
-
-
 
 SUCCESS_MESSAGE = {
     "title": "YES! 🎉💕",
-    "message": """
+   "message": """
     You just made me even more happy! i m the happiest person in this worldddddd 
     
     I promise to make this Valentine's Day (and every day after) 
@@ -72,7 +76,6 @@ SUCCESS_MESSAGE = {
     Get ready for an amazing time together! 💖
     
     I can't wait to celebrate with you! 🌹
-    """
 
 }
 
@@ -262,11 +265,13 @@ if not st.session_state.curtains_open:
                     document.getElementById('leftCurtain').classList.add('open');
                     document.getElementById('rightCurtain').classList.add('open');
                     
+                    // After curtains open animation, trigger page reload to show envelope
                     setTimeout(function() {
-                        window.parent.postMessage({
-                            type: 'streamlit:setComponentValue',
-                            value: 'curtains_opened'
-                        }, '*');
+                        // Use Streamlit's query params to trigger state change
+                        const url = new URL(window.parent.location.href);
+                        url.searchParams.set('curtains', 'open');
+                        window.parent.history.pushState({}, '', url);
+                        window.parent.location.reload();
                     }, 1600);
                 }
             }
@@ -275,9 +280,14 @@ if not st.session_state.curtains_open:
     </html>
     """, height=600)
     
-    if st.button("hidden", key="curtain_trigger"):
-        st.session_state.curtains_open = True
-        st.rerun()
+    # Check URL params to see if curtains were opened
+    try:
+        if st.query_params.get("curtains") == "open":
+            st.session_state.curtains_open = True
+            st.query_params.clear()
+            st.rerun()
+    except:
+        pass
 
 # Envelope
 elif not st.session_state.envelope_opened:
@@ -368,10 +378,11 @@ elif not st.session_state.envelope_opened:
             function openEnvelope() {
                 if (!clicked) {
                     clicked = true;
-                    window.parent.postMessage({
-                        type: 'streamlit:setComponentValue',
-                        value: 'envelope_opened'
-                    }, '*');
+                    // Trigger page reload to show letter
+                    const url = new URL(window.parent.location.href);
+                    url.searchParams.set('envelope', 'open');
+                    window.parent.history.pushState({}, '', url);
+                    window.parent.location.reload();
                 }
             }
         </script>
@@ -379,9 +390,14 @@ elif not st.session_state.envelope_opened:
     </html>
     """, height=400)
     
-    if st.button("hidden", key="envelope_trigger"):
-        st.session_state.envelope_opened = True
-        st.rerun()
+    # Check URL params to see if envelope was opened
+    try:
+        if st.query_params.get("envelope") == "open":
+            st.session_state.envelope_opened = True
+            st.query_params.clear()
+            st.rerun()
+    except:
+        pass
 
 # Letter and Yes/No buttons
 elif st.session_state.answer is None:
