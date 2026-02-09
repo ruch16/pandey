@@ -1,6 +1,5 @@
 import streamlit as st
 import streamlit.components.v1 as components
-import time
 
 # Page configuration
 st.set_page_config(
@@ -14,9 +13,9 @@ st.set_page_config(
 # ============================================
 SECRET_PASSWORD = "MeNu1316"  # Change this!
 
-LETTER_GREETING = "My Duduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu 💕"
+LETTER_GREETING = "My Duduuuuuuuuuuuuuuuuuuuuuuuuuu 💕"
 
-LETTER_MESSAGE = """ Ever since, i met you, i seem to have fallen
+LETTER_MESSAGE = """Ever since, i met you, i seem to have fallen
     deeply in love with you. So much so that i cant even breathe
     but you r not with me. I never thought my lil crush on you will
     grow so much, though we r in a relationship i seem to fall in love with u 
@@ -29,6 +28,7 @@ LETTER_MESSAGE = """ Ever since, i met you, i seem to have fallen
     Will you be my Valentine? 💖
     """
 
+
 LETTER_SIGNATURE = "With all my heart and pussy, your bubu💖"
 
 SUCCESS_TITLE = "YES! 🎉💕"
@@ -40,13 +40,14 @@ SUCCESS_MESSAGE = """You just made me even more happy! i m the happiest person i
     
     Get ready for an amazing time together! 💖
     
-    I can't wait to celebrate with you! 🌹"""
+    I can't wait to celebrate with you! 🌹
+"""
 
 # ============================================
 # Initialize session state
 # ============================================
 if 'stage' not in st.session_state:
-    st.session_state.stage = 'password'  # password, curtains, envelope, letter, success
+    st.session_state.stage = 'password'
 if 'no_clicks' not in st.session_state:
     st.session_state.no_clicks = 0
 
@@ -201,92 +202,190 @@ elif st.session_state.stage == 'curtains':
             st.rerun()
 
 # ============================================
-# STAGE 3: ENVELOPE
+# STAGE 3: ENVELOPE OPENS TO LETTER
 # ============================================
 elif st.session_state.stage == 'envelope':
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    
-    components.html("""
+    components.html(f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
     <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        body {{
+            font-family: 'Georgia', serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 400px;
-        }
-        .envelope-box {
+            align-items: flex-start;
+            min-height: 800px;
+            padding: 50px 20px;
+            background: transparent;
+        }}
+        
+        .container {{
             text-align: center;
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+        }}
+        
+        .envelope-wrapper {{
+            position: relative;
+            width: 280px;
+            height: 180px;
+            margin: 0 auto;
             cursor: pointer;
-        }
-        .envelope-box:hover {
+            transition: transform 0.3s;
+        }}
+        
+        .envelope-wrapper:hover {{
             transform: scale(1.05);
-        }
-        .envelope {
-            width: 250px;
-            height: 160px;
+        }}
+        
+        .envelope {{
+            width: 100%;
+            height: 100%;
             background: #fff5f5;
             border: 3px solid #ff69b4;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4);
             position: relative;
-            display: inline-block;
-        }
-        .flap {
+            overflow: visible;
+        }}
+        
+        .flap {{
             position: absolute;
             top: 0;
             left: 0;
-            border-left: 125px solid transparent;
-            border-right: 125px solid transparent;
-            border-top: 80px solid #ff69b4;
-        }
-        .heart {
+            border-left: 137px solid transparent;
+            border-right: 137px solid transparent;
+            border-top: 90px solid #ff69b4;
+            transform-origin: top center;
+            transition: transform 0.6s ease;
+            z-index: 10;
+        }}
+        
+        .envelope-wrapper.opened .flap {{
+            transform: rotateX(180deg);
+        }}
+        
+        .heart {{
             position: absolute;
-            top: 60px;
+            top: 70px;
             left: 50%;
             transform: translateX(-50%);
             font-size: 3em;
+            z-index: 11;
             animation: beat 1.5s infinite;
-        }
-        @keyframes beat {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.1); }
-        }
-        .label {
+        }}
+        
+        @keyframes beat {{
+            0%, 100% {{ transform: translateX(-50%) scale(1); }}
+            50% {{ transform: translateX(-50%) scale(1.1); }}
+        }}
+        
+        .instruction {{
             margin-top: 20px;
             font-size: 1.8em;
             color: #ff1493;
             font-weight: bold;
-            font-family: Georgia, serif;
-        }
+        }}
+        
+        .letter {{
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(0);
+            width: 90%;
+            max-width: 600px;
+            padding: 40px;
+            background: white;
+            border: 2px solid #ff69b4;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(255, 105, 180, 0.3);
+            opacity: 0;
+            transition: all 0.8s ease;
+            pointer-events: none;
+            z-index: 5;
+        }}
+        
+        .letter.visible {{
+            opacity: 1;
+            transform: translateX(-50%) translateY(220px);
+            pointer-events: all;
+        }}
+        
+        .letter h2 {{
+            color: #ff1493;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }}
+        
+        .letter p {{
+            color: #333;
+            font-size: 1.05em;
+            line-height: 1.8;
+            white-space: pre-line;
+            margin-bottom: 15px;
+        }}
+        
+        .signature {{
+            text-align: right;
+            font-style: italic;
+            margin-top: 30px;
+        }}
+        
+        .buttons {{
+            margin-top: 30px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease 0.5s;
+        }}
+        
+        .letter.visible .buttons {{
+            opacity: 1;
+        }}
     </style>
-    <div class="envelope-box">
-        <div class="envelope">
-            <div class="flap"></div>
-            <div class="heart">❤️</div>
+    </head>
+    <body>
+        <div class="container">
+            <div class="envelope-wrapper" id="envWrap" onclick="openEnvelope()">
+                <div class="envelope">
+                    <div class="flap"></div>
+                    <div class="heart">❤️</div>
+                </div>
+                <div class="instruction" id="instruction">Click to Open 💌</div>
+            </div>
+            
+            <div class="letter" id="letter">
+                <h2>{LETTER_GREETING}</h2>
+                <p>{LETTER_MESSAGE}</p>
+                <p class="signature">{LETTER_SIGNATURE}</p>
+                <div class="buttons" id="buttons">
+                    <!-- Buttons will be added by Streamlit -->
+                </div>
+            </div>
         </div>
-        <div class="label">Click the Envelope 💌</div>
-    </div>
-    """, height=400)
+        
+        <script>
+            let opened = false;
+            function openEnvelope() {{
+                if (!opened) {{
+                    opened = true;
+                    document.getElementById('envWrap').classList.add('opened');
+                    document.getElementById('instruction').style.opacity = '0';
+                    setTimeout(() => {{
+                        document.getElementById('letter').classList.add('visible');
+                    }}, 400);
+                }}
+            }}
+        </script>
+    </body>
+    </html>
+    """, height=900)
     
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("📬 Open Envelope", type="primary", use_container_width=True):
-            st.session_state.stage = 'letter'
-            st.rerun()
-
-# ============================================
-# STAGE 4: LETTER & YES/NO
-# ============================================
-elif st.session_state.stage == 'letter':
-    st.markdown(f"""
-    <div class="letter">
-        <h2>{LETTER_GREETING}</h2>
-        <p>{LETTER_MESSAGE}</p>
-        <p style="text-align: right; font-style: italic; margin-top: 40px;">{LETTER_SIGNATURE}</p>
-    </div>
-    """, unsafe_allow_html=True)
+    # Wait a moment then show buttons
+    st.markdown("<br>" * 25, unsafe_allow_html=True)
     
     # Button sizing
     yes_scale = 1.0 + (st.session_state.no_clicks * 0.3)
@@ -341,7 +440,7 @@ elif st.session_state.stage == 'letter':
         st.markdown(f"<p style='text-align:center;color:#ff69b4;font-size:1.2em;margin-top:20px;'>{hint}</p>", unsafe_allow_html=True)
 
 # ============================================
-# STAGE 5: SUCCESS WITH CONFETTI
+# STAGE 4: SUCCESS WITH CONFETTI
 # ============================================
 else:
     components.html("""
