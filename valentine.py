@@ -13,9 +13,9 @@ st.set_page_config(
 # ============================================
 SECRET_PASSWORD = "MeNu1316"  # Change this!
 
-LETTER_GREETING = "My Duduuuuuuuuuuuuuuuuuuuuuuuuuu 💕"
+LETTER_GREETING = "My Duduuuuuuuuuuuuuuuuuuuuuuuuuuuuuu 💕"
 
-LETTER_MESSAGE = """Ever since, i met you, i seem to have fallen
+LETTER_MESSAGE = """ Ever since, i met you, i seem to have fallen
     deeply in love with you. So much so that i cant even breathe
     but you r not with me. I never thought my lil crush on you will
     grow so much, though we r in a relationship i seem to fall in love with u 
@@ -26,10 +26,10 @@ LETTER_MESSAGE = """Ever since, i met you, i seem to have fallen
     So, on this special day, I have one very important question to ask you...
     
     Will you be my Valentine? 💖
-    """
-
+"""
 
 LETTER_SIGNATURE = "With all my heart and pussy, your bubu💖"
+
 
 SUCCESS_TITLE = "YES! 🎉💕"
 
@@ -187,19 +187,39 @@ elif st.session_state.stage == 'curtains':
         <div class="text">Click to Open Curtains</div>
     </div>
     <script>
+        let clicked = false;
         function openCurtains() {
-            document.getElementById('left').classList.add('open-left');
-            document.getElementById('right').classList.add('open-right');
+            if (!clicked) {
+                clicked = true;
+                document.getElementById('left').classList.add('open-left');
+                document.getElementById('right').classList.add('open-right');
+                
+                // Auto-advance to envelope after curtains open
+                setTimeout(() => {
+                    window.parent.postMessage({action: 'next'}, '*');
+                }, 1600);
+            }
         }
     </script>
     """, height=600)
     
-    st.markdown("<br>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("Continue to Envelope →", type="primary", use_container_width=True):
-            st.session_state.stage = 'envelope'
-            st.rerun()
+    # Hidden auto-advance mechanism
+    st.markdown("""
+    <script>
+        setTimeout(() => {
+            const buttons = window.parent.document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                if (btn.innerText.includes('auto_advance')) {
+                    btn.click();
+                }
+            });
+        }, 2000);
+    </script>
+    """, unsafe_allow_html=True)
+    
+    if st.button("auto_advance", key="auto_next", label_visibility="hidden"):
+        st.session_state.stage = 'envelope'
+        st.rerun()
 
 # ============================================
 # STAGE 3: ENVELOPE OPENS TO LETTER
@@ -384,8 +404,8 @@ elif st.session_state.stage == 'envelope':
     </html>
     """, height=900)
     
-    # Wait a moment then show buttons
-    st.markdown("<br>" * 25, unsafe_allow_html=True)
+    # Add spacing to position buttons below the letter
+    st.markdown("<br>" * 35, unsafe_allow_html=True)
     
     # Button sizing
     yes_scale = 1.0 + (st.session_state.no_clicks * 0.3)
@@ -393,6 +413,9 @@ elif st.session_state.stage == 'envelope':
     
     st.markdown(f"""
     <style>
+        .stButton > button {{
+            width: 100%;
+        }}
         .yes-btn button {{
             background: linear-gradient(135deg, #ff69b4, #ff1493) !important;
             color: white !important;
@@ -401,6 +424,11 @@ elif st.session_state.stage == 'envelope':
             border-radius: 50px !important;
             padding: 20px 40px !important;
             border: none !important;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4) !important;
+        }}
+        .yes-btn button:hover {{
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.6) !important;
         }}
         .no-btn button {{
             background: #ddd !important;
@@ -408,22 +436,23 @@ elif st.session_state.stage == 'envelope':
             font-size: {no_scale}em !important;
             border-radius: 50px !important;
             padding: 15px 30px !important;
+            border: none !important;
         }}
     </style>
     """, unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns([1, 1, 1])
+    col1, col2, col3, col4, col5 = st.columns([1, 2, 1, 2, 1])
     
-    with col1:
+    with col2:
         st.markdown('<div class="yes-btn">', unsafe_allow_html=True)
-        if st.button("💖 YES! 💖"):
+        if st.button("💖 YES! 💖", key="yes_btn", use_container_width=True):
             st.session_state.stage = 'success'
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
     
-    with col3:
+    with col4:
         st.markdown('<div class="no-btn">', unsafe_allow_html=True)
-        if st.button("No"):
+        if st.button("No", key="no_btn", use_container_width=True):
             st.session_state.no_clicks += 1
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
@@ -432,12 +461,13 @@ elif st.session_state.stage == 'envelope':
         hints = [
             "Are you sure? 🥺",
             "The Yes button is growing! 💕",
-            "Come on... 😊",
+            "Come on... you know you want to say yes! 😊",
             "The No is shrinking... 👀",
-            "Just say Yes! 💝"
+            "Just say Yes! 💝",
+            "I'm not giving up! 💪💕"
         ]
         hint = hints[min(st.session_state.no_clicks - 1, len(hints) - 1)]
-        st.markdown(f"<p style='text-align:center;color:#ff69b4;font-size:1.2em;margin-top:20px;'>{hint}</p>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align:center;color:#ff69b4;font-size:1.3em;margin-top:20px;font-weight:bold;'>{hint}</p>", unsafe_allow_html=True)
 
 # ============================================
 # STAGE 4: SUCCESS WITH CONFETTI
