@@ -29,8 +29,6 @@ LETTER_MESSAGE = """ Ever since, i met you, i seem to have fallen
 """
 
 LETTER_SIGNATURE = "With all my heart and pussy, your bubu💖"
-
-
 SUCCESS_TITLE = "YES! 🎉💕"
 
 SUCCESS_MESSAGE = """You just made me even more happy! i m the happiest person in this worldddddd 
@@ -43,7 +41,6 @@ SUCCESS_MESSAGE = """You just made me even more happy! i m the happiest person i
     I can't wait to celebrate with you! 🌹
 """
 
-# ============================================
 # Initialize session state
 # ============================================
 if 'stage' not in st.session_state:
@@ -193,23 +190,27 @@ elif st.session_state.stage == 'curtains':
                 clicked = true;
                 document.getElementById('left').classList.add('open-left');
                 document.getElementById('right').classList.add('open-right');
-                
-                // Auto-advance to envelope after curtains open
-                setTimeout(() => {
-                    window.parent.postMessage({action: 'next'}, '*');
-                }, 1600);
             }
         }
     </script>
     """, height=600)
     
-    # Hidden auto-advance mechanism
+    # CSS to hide the button
+    st.markdown("""
+    <style>
+        .stButton button[kind="secondary"] {
+            display: none !important;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # Auto-advance script
     st.markdown("""
     <script>
         setTimeout(() => {
             const buttons = window.parent.document.querySelectorAll('button');
             buttons.forEach(btn => {
-                if (btn.innerText.includes('auto_advance')) {
+                if (btn.innerText === 'auto_advance') {
                     btn.click();
                 }
             });
@@ -217,7 +218,7 @@ elif st.session_state.stage == 'curtains':
     </script>
     """, unsafe_allow_html=True)
     
-    if st.button("auto_advance", key="auto_next", label_visibility="hidden"):
+    if st.button("auto_advance", key="auto_next"):
         st.session_state.stage = 'envelope'
         st.rerun()
 
