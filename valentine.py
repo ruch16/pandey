@@ -9,49 +9,14 @@ st.set_page_config(
 )
 
 # ============================================
-# PASSWORD PROTECTION - ENABLED BY DEFAULT
-# ============================================
-
-if 'authenticated' not in st.session_state:
-    st.session_state.authenticated = False
-    st.session_state.curtains_open = False
-
-if not st.session_state.authenticated:
-
-    css = """
-    <style>
-        .stApp {
-            background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
-        }
-    </style>
-    """
-
-    st.markdown(css, unsafe_allow_html=True)
-
-
-    
-    st.markdown("<h1 style='text-align: center; color: #ff1493; margin-top: 100px;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
-    
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        password = st.text_input("Secret Code:", type="password", key="auth_password")
-        if st.button("✨ Enter ✨", type="primary", use_container_width=True):
-            # CHANGE THIS PASSWORD TO YOUR OWN SECRET CODE!
-            if password == "MeNu1316":
-                st.session_state.authenticated = True
-                st.session_state.curtains_open = False  # Start with curtains closed
-                st.rerun()
-            else:
-                st.error("❌ Wrong code! Try again 💔")
-    st.stop()
-
-# ============================================
 # CUSTOMIZABLE CONTENT - EDIT THESE!
 # ============================================
 
+# Change this password!
+SECRET_PASSWORD = "MeNu1316"
+
 LETTER_CONTENT = {
-    "greeting": "My Dudu 💕",
+    "greeting": "My Duduuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu 💕",
     "message": """
     Ever since, i met you, i seem to have fallen
     deeply in love with you. So much so that i cant even breathe
@@ -66,28 +31,27 @@ LETTER_CONTENT = {
     Will you be my Valentine? 💖
     """,
     "signature": "With all my heart and pussy, your bubu💖"
-
 }
 
 SUCCESS_MESSAGE = {
     "title": "YES! 🎉💕",
-   "message": """
-    You just made me even more happy! i m the happiest person in this worldddddd 
+    "message": """
+   You just made me even more happy! i m the happiest person in this worldddddd 
     
     I promise to make this Valentine's Day (and every day after) 
     absolutely special for you. 
     
     Get ready for an amazing time together! 💖
     
-    I can't wait to celebrate with you! 🌹"""
-
+    I can't wait to celebrate with you! 🌹
+    """
 }
 
 # ============================================
 # DO NOT EDIT BELOW THIS LINE
 # ============================================
 
-# Custom CSS for animations and styling
+# Custom CSS
 st.markdown("""
 <style>
     /* Hide Streamlit branding */
@@ -98,11 +62,6 @@ st.markdown("""
     /* Background */
     .stApp {
         background: linear-gradient(135deg, #ffeef8 0%, #ffe0f0 100%);
-    }
-    
-    /* Hide default button */
-    .element-container:has(#hidden-button) {
-        display: none;
     }
     
     /* Letter */
@@ -176,6 +135,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Initialize session state
+if 'authenticated' not in st.session_state:
+    st.session_state.authenticated = False
 if 'curtains_open' not in st.session_state:
     st.session_state.curtains_open = False
 if 'envelope_opened' not in st.session_state:
@@ -185,27 +146,60 @@ if 'answer' not in st.session_state:
 if 'no_clicks' not in st.session_state:
     st.session_state.no_clicks = 0
 
-# Curtains
-if not st.session_state.curtains_open:
+# ============================================
+# PASSWORD SCREEN
+# ============================================
+if not st.session_state.authenticated:
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; color: #ff1493;'>💕 Enter Secret Code 💕</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #666; font-size: 1.2em;'>This is a private invitation just for you!</p>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        password = st.text_input("Secret Code:", type="password", key="auth_password")
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("✨ Enter ✨", type="primary", use_container_width=True, key="enter_btn"):
+            if password == SECRET_PASSWORD:
+                st.session_state.authenticated = True
+                st.rerun()
+            else:
+                st.error("❌ Wrong code! Try again 💔")
+    
+    # Add floating hearts
+    st.markdown("""
+    <div class="floating-heart" style="top: 10%; left: 10%; animation-delay: 0s;">💕</div>
+    <div class="floating-heart" style="top: 20%; right: 15%; animation-delay: 1s;">💖</div>
+    <div class="floating-heart" style="bottom: 15%; left: 20%; animation-delay: 2s;">💗</div>
+    <div class="floating-heart" style="bottom: 25%; right: 10%; animation-delay: 1.5s;">💝</div>
+    """, unsafe_allow_html=True)
+
+# ============================================
+# CURTAINS SCREEN
+# ============================================
+elif not st.session_state.curtains_open:
     components.html("""
     <!DOCTYPE html>
     <html>
     <head>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        body {
             overflow: hidden;
             height: 100vh;
+            font-family: 'Georgia', serif;
         }
         .curtain-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             cursor: pointer;
-            z-index: 9999;
         }
         
         .curtain {
@@ -245,7 +239,6 @@ if not st.session_state.curtains_open:
             font-size: 2.5em;
             font-weight: bold;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            font-family: 'Georgia', serif;
             pointer-events: none;
             text-align: center;
             width: 80%;
@@ -268,50 +261,50 @@ if not st.session_state.curtains_open:
                     clicked = true;
                     document.getElementById('leftCurtain').classList.add('open');
                     document.getElementById('rightCurtain').classList.add('open');
-                    
-                    // This is the part that was likely failing:
-                    setTimeout(function() {
-                        const url = new URL(window.parent.location.href);
-                        url.searchParams.set('curtains', 'open');
-                        window.parent.location.href = url.href; // Forces the move to the next state
-                    }, 1600);
                 }
             }
         </script>
     </body>
     </html>
-    """, height=600)
+    """, height=700)
     
-    # Check URL params to see if curtains were opened
-    try:
-        if st.query_params.get("curtains") == "open":
+    st.markdown("<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        if st.button("Continue After Curtains Open", type="primary", use_container_width=True, key="curtain_btn"):
             st.session_state.curtains_open = True
-            st.query_params.clear()
             st.rerun()
-    except:
-        pass
 
-# Envelope
+# ============================================
+# ENVELOPE SCREEN
+# ============================================
 elif not st.session_state.envelope_opened:
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    
     components.html("""
     <!DOCTYPE html>
     <html>
     <head>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 500px;
+            min-height: 400px;
             background: transparent;
+            font-family: 'Georgia', serif;
         }
         
         .envelope-container {
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s ease;
+            padding: 40px;
         }
         
         .envelope-container:hover {
@@ -338,7 +331,6 @@ elif not st.session_state.envelope_opened:
             border-left: 125px solid transparent;
             border-right: 125px solid transparent;
             border-top: 80px solid #ff69b4;
-            transform-origin: top;
         }
         
         .heart-seal {
@@ -360,14 +352,13 @@ elif not st.session_state.envelope_opened:
             font-size: 1.8em;
             color: #ff1493;
             font-weight: bold;
-            font-family: 'Georgia', serif;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
     </style>
     </head>
     <body>
-        <div class="envelope-container" onclick="openEnvelope()">
-            <div class="envelope">
+        <div class="envelope-container" onclick="pulseEnvelope()">
+            <div class="envelope" id="envelope">
                 <div class="envelope-flap"></div>
                 <div class="heart-seal">❤️</div>
             </div>
@@ -375,33 +366,27 @@ elif not st.session_state.envelope_opened:
         </div>
         
         <script>
-            let clicked = false;
-            
-            function openEnvelope() {
-                if (!clicked) {
-                    clicked = true;
-                    // Trigger page reload to show letter
-                    const url = new URL(window.parent.location.href);
-                    url.searchParams.set('envelope', 'open');
-                    window.parent.history.pushState({}, '', url);
-                    window.parent.location.reload();
-                }
+            function pulseEnvelope() {
+                const env = document.getElementById('envelope');
+                env.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    env.style.transform = 'scale(1)';
+                }, 100);
             }
         </script>
     </body>
     </html>
     """, height=400)
     
-    # Check URL params to see if envelope was opened
-    try:
-        if st.query_params.get("envelope") == "open":
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        if st.button("📬 Open Envelope", type="primary", use_container_width=True, key="env_btn"):
             st.session_state.envelope_opened = True
-            st.query_params.clear()
             st.rerun()
-    except:
-        pass
 
-# Letter and Yes/No buttons
+# ============================================
+# LETTER AND YES/NO BUTTONS
+# ============================================
 elif st.session_state.answer is None:
     st.markdown(f"""
     <div class="letter">
@@ -413,11 +398,9 @@ elif st.session_state.answer is None:
     </div>
     """, unsafe_allow_html=True)
     
-    # Calculate button sizes based on no_clicks
+    # Calculate button sizes
     yes_size = 1.5 + (st.session_state.no_clicks * 0.3)
     no_size = max(0.5, 1.5 - (st.session_state.no_clicks * 0.2))
-    
-    st.markdown('<div class="button-container">', unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 1, 1])
     
@@ -426,17 +409,14 @@ elif st.session_state.answer is None:
         <style>
             div[data-testid="column"]:nth-child(1) button {{
                 transform: scale({yes_size}) !important;
-                background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
-                color: white;
-                font-size: 1.2em;
-                font-weight: bold;
-                padding: 15px 30px;
-                border-radius: 50px;
-                border: none;
-                box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
-            }}
-            div[data-testid="column"]:nth-child(1) button:hover {{
-                box-shadow: 0 8px 25px rgba(255, 105, 180, 0.6);
+                background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%) !important;
+                color: white !important;
+                font-size: 1.2em !important;
+                font-weight: bold !important;
+                padding: 15px 30px !important;
+                border-radius: 50px !important;
+                border: none !important;
+                box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4) !important;
             }}
         </style>
         """, unsafe_allow_html=True)
@@ -449,21 +429,19 @@ elif st.session_state.answer is None:
         <style>
             div[data-testid="column"]:nth-child(3) button {{
                 transform: scale({no_size}) !important;
-                background: linear-gradient(135deg, #ddd 0%, #bbb 100%);
-                color: #666;
-                font-size: 1.2em;
-                font-weight: bold;
-                padding: 15px 30px;
-                border-radius: 50px;
-                border: none;
+                background: linear-gradient(135deg, #ddd 0%, #bbb 100%) !important;
+                color: #666 !important;
+                font-size: 1.2em !important;
+                font-weight: bold !important;
+                padding: 15px 30px !important;
+                border-radius: 50px !important;
+                border: none !important;
             }}
         </style>
         """, unsafe_allow_html=True)
         if st.button("No", key="no_button"):
             st.session_state.no_clicks += 1
             st.rerun()
-    
-    st.markdown('</div>', unsafe_allow_html=True)
     
     if st.session_state.no_clicks > 0:
         hints = [
@@ -475,11 +453,13 @@ elif st.session_state.answer is None:
             "I'm not giving up! 💪💕"
         ]
         hint_index = min(st.session_state.no_clicks - 1, len(hints) - 1)
-        st.markdown(f"<p style='text-align: center; color: #ff69b4; font-style: italic; font-size: 1.2em;'>{hints[hint_index]}</p>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align: center; color: #ff69b4; font-style: italic; font-size: 1.2em; margin-top: 30px;'>{hints[hint_index]}</p>", unsafe_allow_html=True)
 
-# Success page with confetti
+# ============================================
+# SUCCESS PAGE WITH CONFETTI
+# ============================================
 else:
-    # Confetti animation
+    # Confetti
     components.html("""
     <!DOCTYPE html>
     <html>
@@ -531,10 +511,7 @@ else:
             }
         }
         
-        // Create confetti immediately
         createConfetti();
-        
-        // Add more confetti every 3 seconds
         setInterval(createConfetti, 3000);
     </script>
     </body>
@@ -548,7 +525,7 @@ else:
     </div>
     """, unsafe_allow_html=True)
 
-# Add some floating hearts
+# Floating hearts on all pages
 st.markdown("""
 <div class="floating-heart" style="top: 10%; left: 10%; animation-delay: 0s;">💕</div>
 <div class="floating-heart" style="top: 20%; right: 15%; animation-delay: 1s;">💖</div>
