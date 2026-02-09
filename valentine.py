@@ -41,10 +41,11 @@ SUCCESS_MESSAGE = """You just made me even more happy! i m the happiest person i
     I can't wait to celebrate with you! 🌹
 """
 
+# ============================================
 # Initialize session state
 # ============================================
 if 'stage' not in st.session_state:
-    st.session_state.stage = 'password'
+    st.session_state.stage = 'password'  # password, envelope, success
 if 'no_clicks' not in st.session_state:
     st.session_state.no_clicks = 0
 
@@ -135,95 +136,13 @@ if st.session_state.stage == 'password':
         
         if st.button("✨ Enter ✨", type="primary", use_container_width=True):
             if password_input == SECRET_PASSWORD:
-                st.session_state.stage = 'curtains'
+                st.session_state.stage = 'envelope'
                 st.rerun()
             else:
                 st.error("❌ Wrong code! Try again 💔")
 
 # ============================================
-# STAGE 2: CURTAINS
-# ============================================
-elif st.session_state.stage == 'curtains':
-    components.html("""
-    <style>
-        body { margin: 0; padding: 0; overflow: hidden; }
-        .curtain-wrap {
-            position: relative;
-            width: 100%;
-            height: 600px;
-            overflow: hidden;
-        }
-        .curtain {
-            position: absolute;
-            top: 0;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff69b4, #ff1493);
-            transition: transform 1.5s ease-in-out;
-        }
-        .curtain-left { left: 0; }
-        .curtain-right { right: 0; }
-        .curtain.open-left { transform: translateX(-100%); }
-        .curtain.open-right { transform: translateX(100%); }
-        .text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 2em;
-            font-family: Georgia, serif;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            cursor: pointer;
-        }
-    </style>
-    <div class="curtain-wrap" onclick="openCurtains()">
-        <div class="curtain curtain-left" id="left"></div>
-        <div class="curtain curtain-right" id="right"></div>
-        <div class="text">Click to Open Curtains</div>
-    </div>
-    <script>
-        let clicked = false;
-        function openCurtains() {
-            if (!clicked) {
-                clicked = true;
-                document.getElementById('left').classList.add('open-left');
-                document.getElementById('right').classList.add('open-right');
-            }
-        }
-    </script>
-    """, height=600)
-    
-    # CSS to hide the button
-    st.markdown("""
-    <style>
-        .stButton button[kind="secondary"] {
-            display: none !important;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # Auto-advance script
-    st.markdown("""
-    <script>
-        setTimeout(() => {
-            const buttons = window.parent.document.querySelectorAll('button');
-            buttons.forEach(btn => {
-                if (btn.innerText === 'auto_advance') {
-                    btn.click();
-                }
-            });
-        }, 2000);
-    </script>
-    """, unsafe_allow_html=True)
-    
-    if st.button("auto_advance", key="auto_next"):
-        st.session_state.stage = 'envelope'
-        st.rerun()
-
-# ============================================
-# STAGE 3: ENVELOPE OPENS TO LETTER
+# STAGE 2: ENVELOPE OPENS TO LETTER
 # ============================================
 elif st.session_state.stage == 'envelope':
     components.html(f"""
@@ -471,7 +390,7 @@ elif st.session_state.stage == 'envelope':
         st.markdown(f"<p style='text-align:center;color:#ff69b4;font-size:1.3em;margin-top:20px;font-weight:bold;'>{hint}</p>", unsafe_allow_html=True)
 
 # ============================================
-# STAGE 4: SUCCESS WITH CONFETTI
+# STAGE 3: SUCCESS WITH CONFETTI
 # ============================================
 else:
     components.html("""
